@@ -1,0 +1,76 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  5.x                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      binary;
+    class       volScalarField;
+    location    "0";
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 315.37;
+grassTemp		uniform 321.34;
+airTemp			uniform 315.37;
+buildingTemp	uniform 321.77;
+roadTemp		uniform 323.51;
+
+boundaryField
+{
+    "(lawns|grass)"
+    {
+        type            fixedValue;
+        value           $grassTemp;
+    }
+	
+	water
+    {
+        type            fixedValue;
+        value           $airTemp;
+    }
+	
+	"(roofs|walls)"
+	{
+        type            fixedValue;
+        value           $buildingTemp;
+    }
+	
+	external
+    {
+        type            fixedValue;
+        value           $airTemp;
+    }
+	
+	".*St"
+    {
+        type            fixedValue;
+        value           $roadTemp;
+    }
+	
+	"(west|north)"
+	{
+		type            zeroGradient;
+	}
+	
+	"(east|south)"
+	{
+		type            fixedValue;
+        value           $airTemp;
+	}
+	
+	atmosphere
+	{
+		type            symmetry;
+	}
+}
+
+
+// ************************************************************************* //
